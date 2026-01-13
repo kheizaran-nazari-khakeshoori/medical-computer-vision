@@ -14,3 +14,20 @@ This system receives medical images (e.g., lung X-Ray for pneumonia/COVID detect
 ## Tech Stack
 - Python, PyTorch, TensorFlow, OpenCV
 - Streamlit / PyQt6 for GUI
+
+## Usage
+```bash
+pip install -r requirements.txt
+streamlit run app/main.py
+# training
+python -m src.train --data data --epochs 10
+# batch predict
+python -m src.batch_predict data/test
+```
+
+## Project Structure
+- `src/preprocessing.py` - DICOM/PIL loading and normalization
+- `src/model.py` - ResNet50 classifier
+- `src/gradcam.py` - explainable heatmaps
+- `src/inference.py` - prediction with confidence
+- `app/main.py` - file uploader widget for patient scans
