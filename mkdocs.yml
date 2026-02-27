@@ -1,0 +1,7 @@
+site_name: Radiology Assistant
+theme: readthedocs
+nav:
+  - Home: README.md
+  - API: docs/API.md
+  - Deployment: docs/DEPLOYMENT.md
+  - User Guide: docs/USER_GUIDE.md
