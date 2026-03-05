@@ -8,3 +8,17 @@ streamlit
 fpdf2
 pydicom
 Pillow
+fastapi
+uvicorn
+python-multipart
+cryptography
+seaborn
+huggingface_hub
+boto3
+wandb
+optuna
+pyyaml
+python-dotenv
+pyjwt
+prometheus_client
+pytest
