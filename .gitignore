@@ -10,6 +10,7 @@ env/
 # Data and models
 data/*
 !data/.gitkeep
+!data/README.md
 models/*.pth
 models/*.pt
 *.dcm
