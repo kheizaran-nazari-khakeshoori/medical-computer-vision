@@ -61,6 +61,28 @@ if uploaded_file is not None:
                             st.session_state["last_image"] = image
                         else:
                             st.info("Heatmap not available")
+                        # PDF report download
+                        try:
+                            from src.report import generate_report
+                            import tempfile, pathlib
+                            patient_id = uploaded_file.name.split(".")[0][:20] or "patient_001"
+                            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_pdf:
+                                pdf_path = tmp_pdf.name
+                            # save heatmap temporarily for report
+                            heatmap_path = None
+                            if heatmap is not None:
+                                from PIL import Image as PILImage
+                                import cv2
+                                heat_color = cv2.applyColorMap(np.uint8(255*heatmap), cv2.COLORMAP_JET)
+                                heat_color = cv2.cvtColor(heat_color, cv2.COLOR_BGR2RGB)
+                                with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp_img:
+                                    PILImage.fromarray(heat_color).save(tmp_img.name)
+                                    heatmap_path = tmp_img.name
+                            generate_report(patient_id, result, pdf_path, heatmap_path)
+                            with open(pdf_path, "rb") as f:
+                                st.download_button("Download PDF report", f, file_name=f"report_{patient_id}.pdf", mime="application/pdf")
+                        except Exception as pdf_e:
+                            st.caption(f"PDF generation: {pdf_e}")
                     except Exception as e:
                         st.error(f"Inference failed: {e}")
                         # fallback to preprocessing check
