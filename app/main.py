@@ -10,11 +10,14 @@ from src.config import CLASS_NAMES
 from src.inference import predict_with_heatmap
 from src.preprocessing import preprocess_image
 from src.visualization import overlay_heatmap
+from app.sidebar import render_sidebar
 
 
 st.set_page_config(page_title="Radiology Assistant", layout="wide")
+settings = render_sidebar()
 st.title("Medical Computer Vision - Radiology Assistant")
 st.write("Upload a chest X-Ray or brain MRI to get classification and Grad-CAM visualization.")
+st.caption(f"Active model: {settings['model']} | threshold: {settings['threshold']} | heatmap: {settings['show_heatmap']}")
 
 uploaded_file = st.file_uploader("added file uploader widget for patient scans", type=["jpg", "jpeg", "png", "dcm", "dicom"])
 
@@ -51,10 +54,10 @@ if uploaded_file is not None:
                         st.write("Probabilities:")
                         for cls, p in result["probabilities"].items():
                             st.progress(float(p), text=f"{cls}: {p:.2%}")
-                        if conf < 0.6:
+                        if conf < settings["threshold"]:
                             st.warning("Low confidence — recommend radiologist review")
                         heatmap = result.get("heatmap")
-                        if heatmap is not None:
+                        if heatmap is not None and settings["show_heatmap"]:
                             overlay = overlay_heatmap(image, heatmap)
                             st.image(overlay, caption="Grad-CAM overlay", use_container_width=True)
                             st.session_state["last_result"] = result
