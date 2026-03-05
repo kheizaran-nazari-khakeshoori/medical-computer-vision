@@ -1,11 +1,15 @@
 """Streamlit app for radiology assistant."""
 
 import io
+import tempfile
 import streamlit as st
 from PIL import Image
+import numpy as np
 
 from src.config import CLASS_NAMES
+from src.inference import predict_with_heatmap
 from src.preprocessing import preprocess_image
+from src.visualization import overlay_heatmap
 
 
 st.set_page_config(page_title="Radiology Assistant", layout="wide")
@@ -37,13 +41,31 @@ if uploaded_file is not None:
 
         with col2:
             st.subheader("Analysis")
-            st.info("Model inference will appear here once trained weights are loaded.")
-            # placeholder for inference
             if st.button("Run diagnosis"):
-                tensor = preprocess_image(image)
-                st.success(f"Preprocessed tensor shape: {tuple(tensor.shape)}")
-                st.write(f"Classes: {CLASS_NAMES}")
-                st.warning("Load trained model in src/model.py to enable real predictions + Grad-CAM overlay.")
+                with st.spinner("Running inference..."):
+                    try:
+                        result = predict_with_heatmap(image)
+                        label = result["label"]
+                        conf = result["confidence"]
+                        st.metric("Prediction", label, f"{conf:.2%} confidence")
+                        st.write("Probabilities:")
+                        for cls, p in result["probabilities"].items():
+                            st.progress(float(p), text=f"{cls}: {p:.2%}")
+                        if conf < 0.6:
+                            st.warning("Low confidence — recommend radiologist review")
+                        heatmap = result.get("heatmap")
+                        if heatmap is not None:
+                            overlay = overlay_heatmap(image, heatmap)
+                            st.image(overlay, caption="Grad-CAM overlay", use_container_width=True)
+                            st.session_state["last_result"] = result
+                            st.session_state["last_image"] = image
+                        else:
+                            st.info("Heatmap not available")
+                    except Exception as e:
+                        st.error(f"Inference failed: {e}")
+                        # fallback to preprocessing check
+                        tensor = preprocess_image(image)
+                        st.write(f"Preprocessed shape: {tuple(tensor.shape)}")
 
     except Exception as e:
         st.error(f"Failed to load image: {e}")
