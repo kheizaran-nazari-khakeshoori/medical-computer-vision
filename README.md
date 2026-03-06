@@ -52,6 +52,14 @@
 
 **Agent / System Execution Demo**
 *Example: upload `chest_xray/NORMAL` -> Run diagnosis -> overlay*
+![Empty UI](assets/01-empty.png)
+*Initial screen with file uploader and sidebar settings*
+
+![Prediction + Grad-CAM](assets/02-result.png)
+*Live prediction: normal 50.79% (pretrained demo, fine-tuned expected ~92%) with Grad-CAM overlay*
+
+[PDF Report](assets/report_chest.pdf) — generated via `src/report.py:21` (see `assets/report_chest.pdf`)
+
 ```bash
 source .venv/bin/activate
 streamlit run app/main.py  # http://localhost:8501
