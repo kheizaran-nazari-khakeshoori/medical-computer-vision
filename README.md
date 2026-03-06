@@ -30,4 +30,19 @@ python -m src.batch_predict data/test
 - `src/model.py` - ResNet50 classifier
 - `src/gradcam.py` - explainable heatmaps
 - `src/inference.py` - prediction with confidence
-- `app/main.py` - file uploader widget for patient scans
+- `app/main.py` - file uploader widget for patient scans + Grad-CAM + PDF
+- `app/sidebar.py` - model selection, threshold, heatmap toggle
+
+## How to Finish / Verify
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+pytest tests/test_syntax.py -v   # syntax check without GPU
+pytest tests/test_preprocessing.py -v  # needs torch+cv2
+streamlit run app/main.py        # http://localhost:8501
+uvicorn src.api:app --reload     # http://localhost:8000/predict
+```
+Place data as `data/<class>/*.jpg` or `.dcm` (see `data/README.md`). Train: `python -m src.train --data data` saves `models/resnet50_medical.pth`. Evaluate: `python -m src.evaluate`.
+
+## Status
+MVP wired: upload -> `predict_with_heatmap()` -> confidence + Grad-CAM overlay (`src/visualization.py`) -> PDF (`src/report.py`) -> sidebar settings. 130+ modules scaffolded for training/eval, security, deployment (Docker, CI).
