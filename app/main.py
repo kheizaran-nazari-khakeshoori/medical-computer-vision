@@ -1,5 +1,10 @@
 """Streamlit app for radiology assistant."""
 
+import sys
+from pathlib import Path
+# ensure project root on sys.path for `from src...` when run via `streamlit run app/main.py`
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 import io
 import tempfile
 import streamlit as st
