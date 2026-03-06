@@ -15,7 +15,10 @@ def split_dataset(source_dir: str, output_dir: str, train_ratio: float = 0.7, va
     for class_dir in source.iterdir():
         if not class_dir.is_dir():
             continue
-        files = list(class_dir.glob("*"))
+        # skip output dir if inside source (e.g., data/processed inside data)
+        if class_dir.resolve() == output.resolve() or output.resolve() in class_dir.resolve().parents:
+            continue
+        files = [p for p in class_dir.glob("*") if p.is_file()]
         random.shuffle(files)
         n = len(files)
         n_train = int(n * train_ratio)
