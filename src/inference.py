@@ -4,17 +4,33 @@ import torch
 import torch.nn.functional as F
 from PIL import Image
 
-from src.config import CLASS_NAMES
-from src.model import get_model
+from pathlib import Path
+
+from src.config import CLASS_NAMES, MODEL_PATH
+from src.model import get_model, load_model
 from src.preprocessing import preprocess_image
 from src.utils import get_device
+
+
+def _load_default_model(device):
+    """Load fine-tuned checkpoint if exists, else fallback to ImageNet."""
+    ckpt = Path(MODEL_PATH)
+    if ckpt.exists():
+        try:
+            return load_model(str(ckpt), device=str(device))
+        except Exception:
+            pass
+    model = get_model(pretrained=True)
+    model.to(device)
+    return model
 
 
 def predict(image: Image.Image, model: torch.nn.Module | None = None, device: torch.device | None = None):
     """Run inference and return class, confidence and all probabilities."""
     device = device or get_device()
     if model is None:
-        model = get_model(pretrained=True)
+        model = _load_default_model(device)
+    else:
         model.to(device)
     model.eval()
 
@@ -39,7 +55,8 @@ def predict_with_heatmap(image: Image.Image, model: torch.nn.Module | None = Non
 
     device = get_device()
     if model is None:
-        model = get_model(pretrained=True)
+        model = _load_default_model(device)
+    else:
         model.to(device)
     model.eval()
 
