@@ -15,8 +15,10 @@ MODEL_NAME = "resnet50"  # options: resnet50, efficientnet_b0
 PRETRAINED = True
 
 # Paths
-DATA_DIR = "data"
-MODELS_DIR = "models"
+import os
+DATA_DIR = os.getenv("DATA_DIR", "data")
+MODELS_DIR = os.getenv("MODELS_DIR", "models")
+MODEL_PATH = os.getenv("MODEL_PATH", "models/resnet50_medical.pth")
 
 # Training defaults
 BATCH_SIZE = 16
