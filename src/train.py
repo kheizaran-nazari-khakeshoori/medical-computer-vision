@@ -85,17 +85,25 @@ def train(data_dir: str = "data", epochs: int = NUM_EPOCHS, batch_size: int = BA
     best_val_acc = 0.0
     ensure_dir(MODELS_DIR)
     save_path = os.path.join(MODELS_DIR, "resnet50_medical.pth")
+    patience = 3
+    stale = 0
 
     for epoch in range(epochs):
         train_loss = train_one_epoch(model, train_loader, optimizer, criterion, device)
         val_loss, val_acc = validate(model, val_loader, criterion, device)
         print(f"epoch {epoch+1}/{epochs} train_loss: {train_loss:.4f} val_loss: {val_loss:.4f} val_acc: {val_acc:.4f}")
 
-        # save best checkpoint
-        if val_acc >= best_val_acc:
+        # save best checkpoint + early stopping
+        if val_acc > best_val_acc:
             best_val_acc = val_acc
             torch.save(model.state_dict(), save_path)
             print(f"  -> saved best model (val_acc {val_acc:.4f}) to {save_path}")
+            stale = 0
+        else:
+            stale += 1
+            if stale >= patience:
+                print(f"early stopping at epoch {epoch+1}")
+                break
 
     # ensure final model saved even if no improvement
     if not Path(save_path).exists():
