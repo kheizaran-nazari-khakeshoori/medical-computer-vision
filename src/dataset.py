@@ -6,6 +6,7 @@ from typing import Callable, List, Tuple
 from PIL import Image
 from torch.utils.data import Dataset
 
+from src.config import CLASS_NAMES
 from src.preprocessing import get_preprocess_transform, load_image
 
 
@@ -20,7 +21,12 @@ class MedicalImageDataset(Dataset):
         self.class_to_idx = {}
 
         if self.root.exists():
-            classes = sorted([d.name for d in self.root.iterdir() if d.is_dir()])
+            discovered = [d.name for d in self.root.iterdir() if d.is_dir()]
+            # keep canonical order from config to avoid label flip (e.g. normal=0, diseased=1)
+            ordered = [c for c in CLASS_NAMES if c in discovered]
+            # include any extra discovered classes not in config
+            extras = sorted([c for c in discovered if c not in CLASS_NAMES])
+            classes = ordered + extras
             self.class_to_idx = {cls: i for i, cls in enumerate(classes)}
             for cls, idx in self.class_to_idx.items():
                 for p in (self.root / cls).rglob("*"):
