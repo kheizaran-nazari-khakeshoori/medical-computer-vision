@@ -9,6 +9,8 @@ from src.utils import get_device
 
 
 def evaluate(model, data_dir: str = "data", batch_size: int = 16):
+    from src.config import CLASS_NAMES
+
     device = get_device()
     model.to(device)
     model.eval()
@@ -27,8 +29,10 @@ def evaluate(model, data_dir: str = "data", batch_size: int = 16):
             y_true.extend(labels.tolist())
 
     acc = accuracy_score(y_true, y_pred)
+    # ensure labels align with CLASS_NAMES
+    labels = list(range(len(CLASS_NAMES)))
     print(f"accuracy: {acc:.4f}")
-    print(classification_report(y_true, y_pred, zero_division=0))
+    print(classification_report(y_true, y_pred, labels=labels, target_names=CLASS_NAMES, zero_division=0))
     print("confusion matrix:")
-    print(confusion_matrix(y_true, y_pred))
+    print(confusion_matrix(y_true, y_pred, labels=labels))
     return {"accuracy": acc, "y_true": y_true, "y_pred": y_pred}
