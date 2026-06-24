@@ -25,9 +25,10 @@ def set_seed(seed: int = 42) -> None:
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
-    # Deterministic behavior (may impact performance)
-    torch.backends.cudnn.deterministic = False
-    torch.backends.cudnn.benchmark = True
+    # prefer deterministic for medical reproducibility
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    os.environ["PYTHONHASHSEED"] = str(seed)
 
 
 def is_valid_image_path(path: str | os.PathLike) -> bool:
