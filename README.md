@@ -77,9 +77,9 @@ PDF: report_patient001.pdf generated (DiagnosisReport, fpdf2)
 **Highlights**
 - End-to-end medical workflow: upload -> preprocess -> predict -> explain -> report
 - Transfer learning with calibrated confidence + heatmaps
-- Modular architecture: 130+ modules, Docker + CI ready
-- Graceful fallbacks: corrupted DICOM, low-confidence warnings, temp cleanup src/cleanup.py
-- Privacy-aware: anonymization src/anonymize.py, encryption src/encryption.py, audit src/audit.py
+- Modular architecture: 26 core modules + 100+ experimental extensions, Docker + CI ready
+- Graceful fallbacks: corrupted DICOM, low-confidence warnings, temp cleanup
+- Reproducible: pinned deps, stratified split, validation + early stopping (`src/train.py:27`)
 
 **Built With**
 Python • PyTorch • torchvision • OpenCV • Streamlit • FastAPI • pydicom • scikit-learn • fpdf2 • Docker
@@ -272,26 +272,29 @@ Application (app/main.py + app/sidebar.py)
 │   ├── dicom_viewer.py # DICOM preview
 │   ├── history.py      # patient history
 │   └── dashboard.py    # metrics dashboard
-├── src/                # core (60+ modules, key below)
+├── src/                # core 26 modules (portfolio)
 │   ├── config.py       # IMAGE_SIZE, CLASS_NAMES, hyperparams
 │   ├── preprocessing.py# load_image (DICOM/PIL) + transforms
-│   ├── dataset.py      # MedicalImageDataset + DICOM/CSV variants
+│   ├── dataset.py      # MedicalImageDataset (CLASS_NAMES order)
 │   ├── model.py        # ResNet50
+│   ├── inference.py    # predict + checkpoint loading + Grad-CAM
 │   ├── gradcam.py      # Grad-CAM
-│   ├── inference.py    # predict + predict_with_heatmap
 │   ├── visualization.py# overlay_heatmap
 │   ├── report.py       # PDF generation
-│   ├── train.py        # training loop
+│   ├── train.py        # stratified split + validation + early stopping
 │   ├── evaluate.py     # accuracy/F1/confusion
-│   ├── split.py        # train/val/test split
-│   └── ...             # augmentation, schedulers, security, monitoring (see src/)
-├── data/               # put normal/diseased here (see data/README.md) — gitignored except .gitkeep
+│   ├── scheduler.py    # LR schedulers
+│   └── validation.py   # input checks
+├── src/experimental/   # 100+ extensions (PACS, federated, 3D…) — not core
+├── notebooks/demo.ipynb# 3-cell demo for professors
+├── data/               # put normal/diseased here — gitignored except .gitkeep
 ├── models/             # resnet50_medical.pth — gitignored
 ├── tests/              # test_preprocessing.py, test_syntax.py, conftest.py
-├── docs/               # API.md, DEPLOYMENT.md, GRADCAM.md, etc.
+├── docs/               # API.md, DEPLOYMENT.md, GRADCAM.md, MODEL_CARD.md
 ├── .streamlit/config.toml
-├── requirements.txt
-├── Dockerfile / docker-compose.yml / mkdocs.yml / dvc.yaml / Makefile
+├── pyproject.toml      # black/ruff/mypy
+├── requirements.txt    # pinned
+├── Dockerfile / docker-compose.yml / mkdocs.yml / Makefile
 └── README.md
 ```
 
