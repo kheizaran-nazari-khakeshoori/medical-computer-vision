@@ -22,3 +22,9 @@ Thumbs.db
 .idea/
 # Logs
 *.log
+logs/
+# Notebooks
+.ipynb_checkpoints/
+# Experimental outputs
+wandb/
+lightning_logs/
