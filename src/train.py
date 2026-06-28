@@ -81,6 +81,12 @@ def train(data_dir: str = "data", epochs: int = NUM_EPOCHS, batch_size: int = BA
     model = get_model().to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
     criterion = nn.CrossEntropyLoss()
+    try:
+        from src.scheduler import get_scheduler
+
+        scheduler = get_scheduler(optimizer, name="cosine", epochs=epochs)
+    except Exception:
+        scheduler = None
 
     best_val_acc = 0.0
     ensure_dir(MODELS_DIR)
@@ -92,6 +98,12 @@ def train(data_dir: str = "data", epochs: int = NUM_EPOCHS, batch_size: int = BA
         train_loss = train_one_epoch(model, train_loader, optimizer, criterion, device)
         val_loss, val_acc = validate(model, val_loader, criterion, device)
         print(f"epoch {epoch+1}/{epochs} train_loss: {train_loss:.4f} val_loss: {val_loss:.4f} val_acc: {val_acc:.4f}")
+
+        if scheduler is not None:
+            if isinstance(scheduler, torch.optim.lr_scheduler.ReduceLROnPlateau):
+                scheduler.step(val_loss)
+            else:
+                scheduler.step()
 
         # save best checkpoint + early stopping
         if val_acc > best_val_acc:
