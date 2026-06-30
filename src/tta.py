@@ -7,11 +7,9 @@ from PIL import Image
 
 def tta_predict(model, image: Image.Image, n_augmentations: int = 5, device="cpu"):
     """Average predictions over augmentations."""
+    from src.preprocessing import preprocess_image
+
     model.eval()
-    base_transform = transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.ToTensor(),
-    ])
     augment = transforms.Compose([
         transforms.RandomHorizontalFlip(p=0.5),
         transforms.RandomRotation(degrees=10),
@@ -19,7 +17,7 @@ def tta_predict(model, image: Image.Image, n_augmentations: int = 5, device="cpu
     probs = []
     for _ in range(n_augmentations):
         aug_img = augment(image)
-        tensor = base_transform(aug_img).unsqueeze(0).to(device)
+        tensor = preprocess_image(aug_img).unsqueeze(0).to(device)
         with torch.no_grad():
             logits = model(tensor)
             probs.append(torch.softmax(logits, dim=1)[0])
