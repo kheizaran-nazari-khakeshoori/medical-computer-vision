@@ -1,10 +1,20 @@
 """Checking image quality before inference."""
+
 import cv2
 import numpy as np
-def check_blur(image: np.ndarray, threshold=100):
+from PIL import Image
+
+
+def check_blur(image: np.ndarray | Image.Image, threshold=100):
+    if isinstance(image, Image.Image):
+        image = np.array(image.convert("RGB"))
     gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     score = cv2.Laplacian(gray, cv2.CV_64F).var()
-    return score > threshold, score
-def check_contrast(image: np.ndarray, threshold=20):
+    return score > threshold, float(score)
+
+
+def check_contrast(image: np.ndarray | Image.Image, threshold=20):
+    if isinstance(image, Image.Image):
+        image = np.array(image.convert("RGB"))
     gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    return gray.std() > threshold
+    return gray.std() > threshold, float(gray.std())
