@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+title: Medical Computer Vision — Radiology Assistant
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - given-names: Kheizaran
+    family-names: Nazari Khakeshoori
+    email: kheizarannazarikhakeshoori@gmail.com
+repository-code: https://github.com/kheizaran-nazari-khakeshoori/medical-computer-vision
+license: MIT
+keywords: ["computer-vision", "medical-imaging", "grad-cam", "pytorch", "radiology"]
+version: 1.0.0
+date-released: 2026-09-12
