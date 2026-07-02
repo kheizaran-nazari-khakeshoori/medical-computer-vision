@@ -35,6 +35,16 @@ def predict(image: Image.Image, model: torch.nn.Module | None = None, device: to
     model.eval()
 
     tensor = preprocess_image(image).unsqueeze(0).to(device)
+    # optional quality gate
+    try:
+        from src.quality_check import check_blur
+
+        ok, score = check_blur(image)
+        if not ok:
+            # still predict but could log low quality
+            pass
+    except Exception:
+        pass
     with torch.no_grad():
         logits = model(tensor)
         probs = F.softmax(logits, dim=1)[0]
