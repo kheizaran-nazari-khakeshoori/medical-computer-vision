@@ -1,9 +1,17 @@
 stages:
   prepare:
-    cmd: python src/split.py
-    deps: [data/raw]
-    outs: [data/processed]
+    cmd: python -c "from src.split import split_dataset; split_dataset('data','/tmp/processed')"
+    deps: [data]
+    outs: []
   train:
-    cmd: python src/train.py
-    deps: [data/processed, src/train.py]
+    cmd: python -m src.train
+    deps: [data, src/train.py, src/model.py, src/dataset.py]
     outs: [models/resnet50_medical.pth]
+  evaluate:
+    cmd: python -m src.evaluate
+    deps: [models/resnet50_medical.pth, src/evaluate.py]
+    outs: []
+  export:
+    cmd: python -m src.export_onnx
+    deps: [models/resnet50_medical.pth, src/export_onnx.py]
+    outs: [models/model.onnx]
