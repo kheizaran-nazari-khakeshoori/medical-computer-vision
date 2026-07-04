@@ -76,10 +76,10 @@ PDF: report_patient001.pdf generated (DiagnosisReport, fpdf2)
 
 **Highlights**
 - End-to-end medical workflow: upload -> preprocess -> predict -> explain -> report
-- Transfer learning with calibrated confidence + heatmaps
-- Modular architecture: 26 core modules + 100+ experimental extensions, Docker + CI ready
-- Graceful fallbacks: corrupted DICOM, low-confidence warnings, temp cleanup
-- Reproducible: pinned deps, stratified split, validation + early stopping (`src/train.py:27`)
+- Transfer learning with calibrated confidence + heatmaps + TTA (`src/tta.py:7`) + temperature scaling (`src/temperature_scaling.py:5`)
+- Modular architecture: 32 core modules + experimental extensions, Docker + CI + DVC (`dvc.yaml:1`) ready
+- Production: ONNX export (`src/export_onnx.py:6`), quantization (`src/model_compress.py:5`), benchmark (`src/benchmark.py:12`), drift monitor (`src/drift_monitor.py:1`)
+- Reproducible: pinned deps, stratified split, validation + early stopping (`src/train.py:70`), AUC + calibration (`src/evaluate.py:30`)
 
 **Built With**
 Python • PyTorch • torchvision • OpenCV • Streamlit • FastAPI • pydicom • scikit-learn • fpdf2 • Docker
