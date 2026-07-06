@@ -1,0 +1,4 @@
+python -m src.evaluate -- smoke subset 64
+accuracy: 0.52 (random init)
+expected after fine-tune: 0.92 per MODEL_CARD.md
+see src/evaluate.py:24 for full classification_report
