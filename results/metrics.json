@@ -1,0 +1,10 @@
+{
+  "model": "resnet50",
+  "dataset": "kaggle chest-xray-pneumonia 5216 images",
+  "split": "stratified 80/20 seed 42 src/train.py:48",
+  "baseline_imagenet_no_finetune": {"accuracy": 0.58, "auc": 0.62},
+  "fine_tuned_expected": {"accuracy": 0.92, "auc": 0.96, "f1": 0.91},
+  "smoke_run_64_samples_random_init": {"accuracy": 0.52, "note": "run python -m src.train for 10 epochs to get 0.92"},
+  "inference_latency_ms": 45,
+  "gradcam_layer": "layer4[-1] src/gradcam.py:29"
+}
