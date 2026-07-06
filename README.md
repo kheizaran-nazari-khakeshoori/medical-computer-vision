@@ -1,3 +1,5 @@
+[![ci](https://github.com/kheizaran-nazari-khakeshoori/medical-computer-vision/actions/workflows/ci.yml/badge.svg)](https://github.com/kheizaran-nazari-khakeshoori/medical-computer-vision/actions/workflows/ci.yml) [![python](https://img.shields.io/badge/python-3.10%20%7C%203.11-blue)](pyproject.toml) [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
 # Medical Computer Vision — Radiology Assistant
 *Intelligent assistant for chest X-Ray / brain MRI: classification + Grad-CAM explainability + Streamlit diagnosis UI.*
 ***Portfolio Project*** *— Demonstrates Transfer Learning, Medical Image Engineering, Explainable AI (Grad-CAM), and Full-stack ML Deployment.*
