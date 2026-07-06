@@ -16,6 +16,7 @@ PRETRAINED = True
 
 # Paths
 import os
+
 DATA_DIR = os.getenv("DATA_DIR", "data")
 MODELS_DIR = os.getenv("MODELS_DIR", "models")
 MODEL_PATH = os.getenv("MODEL_PATH", "models/resnet50_medical.pth")

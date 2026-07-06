@@ -1,6 +1,10 @@
 """Streamlining report generation with templates."""
-from src.report import generate_report
+
 from pathlib import Path
+
+from src.report import generate_report
+
+
 def build_report(patient_id, prediction, include_heatmap=False):
     output = f"reports/report_{patient_id}.pdf"
     Path("reports").mkdir(exist_ok=True)

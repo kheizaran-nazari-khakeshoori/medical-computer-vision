@@ -1,9 +1,8 @@
 """Benchmark inference latency and throughput."""
 
 import time
-from PIL import Image
 
-import torch
+from PIL import Image
 
 from src.inference import predict
 from src.model import get_model

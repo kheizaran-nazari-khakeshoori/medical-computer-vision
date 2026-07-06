@@ -1,7 +1,10 @@
 """Backup utility for model weights."""
+
 import shutil
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+
+
 def backup_model(src: str = "models/resnet50_medical.pth", dest_dir: str = "models/backups"):
     src_path = Path(src)
     if not src_path.exists():

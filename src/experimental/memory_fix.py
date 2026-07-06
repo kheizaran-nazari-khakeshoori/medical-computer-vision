@@ -1,6 +1,10 @@
 """Fixing memory leak in inference."""
-import torch
+
 import gc
+
+import torch
+
+
 def inference_no_leak(model, tensor):
     model.eval()
     with torch.no_grad():

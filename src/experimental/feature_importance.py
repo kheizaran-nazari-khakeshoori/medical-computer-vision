@@ -1,6 +1,8 @@
 """Feature importance plot for model insights."""
+
 import matplotlib.pyplot as plt
-import numpy as np
+
+
 def plot_feature_importance(importance: dict, save_path=None):
     names = list(importance.keys())
     values = list(importance.values())

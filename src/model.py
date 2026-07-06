@@ -21,7 +21,9 @@ def get_model(num_classes: int = NUM_CLASSES, pretrained: bool = True) -> nn.Mod
     return model
 
 
-def load_model(checkpoint_path: str, num_classes: int = NUM_CLASSES, device: str = "cpu") -> nn.Module:
+def load_model(
+    checkpoint_path: str, num_classes: int = NUM_CLASSES, device: str = "cpu"
+) -> nn.Module:
     """Load model from checkpoint."""
     model = get_model(num_classes=num_classes, pretrained=False)
     state = torch.load(checkpoint_path, map_location=device)

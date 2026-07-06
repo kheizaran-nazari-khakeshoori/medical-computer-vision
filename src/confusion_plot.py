@@ -1,8 +1,8 @@
 """Confusion matrix plot for evaluation."""
 
 import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix
 import seaborn as sns
+from sklearn.metrics import confusion_matrix
 
 
 def plot_confusion_matrix(y_true, y_pred, labels=None, save_path: str | None = None):

@@ -30,7 +30,15 @@ class MedicalImageDataset(Dataset):
             self.class_to_idx = {cls: i for i, cls in enumerate(classes)}
             for cls, idx in self.class_to_idx.items():
                 for p in (self.root / cls).rglob("*"):
-                    if p.suffix.lower() in {".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".dcm", ".dicom"}:
+                    if p.suffix.lower() in {
+                        ".jpg",
+                        ".jpeg",
+                        ".png",
+                        ".bmp",
+                        ".tiff",
+                        ".dcm",
+                        ".dicom",
+                    }:
                         self.samples.append((p, idx))
 
     def __len__(self):

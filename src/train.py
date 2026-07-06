@@ -47,8 +47,8 @@ def validate(model, loader, criterion, device):
 
 def _stratified_split(dataset, val_ratio=0.2, seed=RANDOM_SEED):
     """Stratified split preserving class distribution."""
-    from collections import defaultdict
     import random
+    from collections import defaultdict
 
     random.seed(seed)
     class_to_indices = defaultdict(list)
@@ -97,7 +97,9 @@ def train(data_dir: str = "data", epochs: int = NUM_EPOCHS, batch_size: int = BA
     for epoch in range(epochs):
         train_loss = train_one_epoch(model, train_loader, optimizer, criterion, device)
         val_loss, val_acc = validate(model, val_loader, criterion, device)
-        print(f"epoch {epoch+1}/{epochs} train_loss: {train_loss:.4f} val_loss: {val_loss:.4f} val_acc: {val_acc:.4f}")
+        print(
+            f"epoch {epoch+1}/{epochs} train_loss: {train_loss:.4f} val_loss: {val_loss:.4f} val_acc: {val_acc:.4f}"
+        )
 
         if scheduler is not None:
             if isinstance(scheduler, torch.optim.lr_scheduler.ReduceLROnPlateau):

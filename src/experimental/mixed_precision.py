@@ -1,6 +1,8 @@
 """Enabling mixed precision training for speed."""
-import torch
-from torch.cuda.amp import autocast, GradScaler
+
+from torch.cuda.amp import GradScaler, autocast
+
+
 def train_with_amp(model, loader, optimizer, criterion, device):
     scaler = GradScaler()
     model.train()

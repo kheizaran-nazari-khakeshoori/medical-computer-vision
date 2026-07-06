@@ -1,7 +1,7 @@
 """MRI normalization for brain scans."""
 
-import numpy as np
 import cv2
+import numpy as np
 
 
 def z_score_normalize(image: np.ndarray) -> np.ndarray:

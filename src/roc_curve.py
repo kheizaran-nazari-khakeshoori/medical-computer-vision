@@ -1,7 +1,7 @@
 """ROC curve visualization for diagnostics."""
 
 import matplotlib.pyplot as plt
-from sklearn.metrics import roc_curve, auc
+from sklearn.metrics import auc, roc_curve
 
 
 def plot_roc_curve(y_true, y_scores, save_path: str | None = None):

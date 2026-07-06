@@ -1,8 +1,9 @@
 """History page for patient scan tracking."""
 
-import streamlit as st
 import json
 from pathlib import Path
+
+import streamlit as st
 
 HISTORY_FILE = Path("data/history.json")
 

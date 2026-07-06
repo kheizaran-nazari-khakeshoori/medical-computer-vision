@@ -1,4 +1,5 @@
 """API endpoint for prediction service."""
+
 import io
 import time
 

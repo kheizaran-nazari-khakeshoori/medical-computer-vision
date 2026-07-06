@@ -1,9 +1,12 @@
 """Recording inference latency."""
-import time
-from pathlib import Path
+
 import json
 from datetime import datetime
+from pathlib import Path
+
 LOG = Path("logs/latency.json")
+
+
 def record_latency(latency_ms: float, model="resnet50"):
     LOG.parent.mkdir(parents=True, exist_ok=True)
     logs = json.loads(LOG.read_text()) if LOG.exists() else []

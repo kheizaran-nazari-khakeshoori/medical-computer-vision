@@ -1,8 +1,8 @@
 """Test time augmentation for better accuracy."""
 
 import torch
-from torchvision import transforms
 from PIL import Image
+from torchvision import transforms
 
 
 def tta_predict(model, image: Image.Image, n_augmentations: int = 5, device="cpu"):
@@ -10,10 +10,12 @@ def tta_predict(model, image: Image.Image, n_augmentations: int = 5, device="cpu
     from src.preprocessing import preprocess_image
 
     model.eval()
-    augment = transforms.Compose([
-        transforms.RandomHorizontalFlip(p=0.5),
-        transforms.RandomRotation(degrees=10),
-    ])
+    augment = transforms.Compose(
+        [
+            transforms.RandomHorizontalFlip(p=0.5),
+            transforms.RandomRotation(degrees=10),
+        ]
+    )
     probs = []
     for _ in range(n_augmentations):
         aug_img = augment(image)

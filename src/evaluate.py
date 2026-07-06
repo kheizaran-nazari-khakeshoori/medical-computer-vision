@@ -43,7 +43,11 @@ def evaluate(model, data_dir: str = "data", batch_size: int = 16):
         print(f"roc_auc: {auc:.4f}")
     except Exception:
         auc = 0.0
-    print(classification_report(y_true, y_pred, labels=labels, target_names=CLASS_NAMES, zero_division=0))
+    print(
+        classification_report(
+            y_true, y_pred, labels=labels, target_names=CLASS_NAMES, zero_division=0
+        )
+    )
     print("confusion matrix:")
     print(confusion_matrix(y_true, y_pred, labels=labels))
     return {"accuracy": acc, "auc": auc, "y_true": y_true, "y_pred": y_pred, "y_score": y_score}

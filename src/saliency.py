@@ -1,6 +1,7 @@
 """Saliency map generation for explainability."""
-import torch
-import numpy as np
+
+
+
 def saliency_map(model, image_tensor, class_idx=None):
     model.eval()
     image_tensor.requires_grad = True

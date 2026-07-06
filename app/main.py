@@ -2,11 +2,11 @@
 
 import sys
 from pathlib import Path
+
 # ensure project root on sys.path for `from src...` when run via `streamlit run app/main.py`
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import io
-import os
 import tempfile
 from pathlib import Path
 
@@ -15,22 +15,24 @@ import numpy as np
 import streamlit as st
 from PIL import Image
 
-from src.config import CLASS_NAMES
+from app.sidebar import render_sidebar
 from src.inference import predict_with_heatmap
 from src.preprocessing import load_image, preprocess_image
 from src.visualization import overlay_heatmap
-from app.sidebar import render_sidebar
 
 
 @st.cache_resource(show_spinner=False)
 def get_cached_model():
-    from src.model import get_model
     from pathlib import Path
+
     from src.config import MODEL_PATH
+    from src.model import get_model
+
     ckpt = Path(MODEL_PATH)
     if ckpt.exists():
         try:
             from src.model import load_model
+
             return load_model(str(ckpt), device="cpu")
         except Exception:
             pass
@@ -41,9 +43,13 @@ st.set_page_config(page_title="Radiology Assistant", layout="wide")
 settings = render_sidebar()
 st.title("Medical Computer Vision - Radiology Assistant")
 st.write("Upload a chest X-Ray or brain MRI to get classification and Grad-CAM visualization.")
-st.caption(f"Active model: {settings['model']} | threshold: {settings['threshold']} | heatmap: {settings['show_heatmap']}")
+st.caption(
+    f"Active model: {settings['model']} | threshold: {settings['threshold']} | heatmap: {settings['show_heatmap']}"
+)
 
-uploaded_file = st.file_uploader("added file uploader widget for patient scans", type=["jpg", "jpeg", "png", "dcm", "dicom"])
+uploaded_file = st.file_uploader(
+    "added file uploader widget for patient scans", type=["jpg", "jpeg", "png", "dcm", "dicom"]
+)
 
 col1, col2 = st.columns(2)
 
@@ -93,21 +99,32 @@ if uploaded_file is not None:
                             from src.report import generate_report
 
                             patient_id = uploaded_file.name.split(".")[0][:20] or "patient_001"
-                            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_pdf:
+                            with tempfile.NamedTemporaryFile(
+                                delete=False, suffix=".pdf"
+                            ) as tmp_pdf:
                                 pdf_path = tmp_pdf.name
                             tmp_paths.append(pdf_path)
                             # save heatmap temporarily for report
                             heatmap_path = None
                             if heatmap is not None:
-                                heat_color = cv2.applyColorMap(np.uint8(255*heatmap), cv2.COLORMAP_JET)
+                                heat_color = cv2.applyColorMap(
+                                    np.uint8(255 * heatmap), cv2.COLORMAP_JET
+                                )
                                 heat_color = cv2.cvtColor(heat_color, cv2.COLOR_BGR2RGB)
-                                with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp_img:
+                                with tempfile.NamedTemporaryFile(
+                                    delete=False, suffix=".png"
+                                ) as tmp_img:
                                     Image.fromarray(heat_color).save(tmp_img.name)
                                     heatmap_path = tmp_img.name
                                 tmp_paths.append(heatmap_path)
                             generate_report(patient_id, result, pdf_path, heatmap_path)
                             with open(pdf_path, "rb") as f:
-                                st.download_button("Download PDF report", f, file_name=f"report_{patient_id}.pdf", mime="application/pdf")
+                                st.download_button(
+                                    "Download PDF report",
+                                    f,
+                                    file_name=f"report_{patient_id}.pdf",
+                                    mime="application/pdf",
+                                )
                         except Exception as pdf_e:
                             st.caption(f"PDF generation: {pdf_e}")
                         finally:

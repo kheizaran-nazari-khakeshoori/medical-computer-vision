@@ -1,6 +1,7 @@
 """Image cache for faster preprocessing."""
 
 from functools import lru_cache
+
 from src.preprocessing import load_image, preprocess_image
 
 

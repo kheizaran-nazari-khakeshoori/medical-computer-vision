@@ -3,8 +3,8 @@
 import cv2
 import numpy as np
 import pydicom
-from PIL import Image
 import torch
+from PIL import Image
 from torchvision import transforms
 
 from src.config import IMAGE_MEAN, IMAGE_SIZE, IMAGE_STD
@@ -25,7 +25,7 @@ def _apply_dicom_windowing(pixel_array: np.ndarray, ds) -> np.ndarray:
         lower = center - width / 2
         upper = center + width / 2
         pixel_array = np.clip(pixel_array, lower, upper)
-        pixel_array = ((pixel_array - lower) / (upper - lower) * 255.0)
+        pixel_array = (pixel_array - lower) / (upper - lower) * 255.0
         return pixel_array.astype(np.uint8)
     except Exception:
         # Fallback: min-max normalize
@@ -71,21 +71,25 @@ def load_image(path: str) -> Image.Image:
 
 
 # Transforms for pretrained models (ResNet50/EfficientNet)
-_preprocess_transform = transforms.Compose([
-    transforms.Resize((IMAGE_SIZE, IMAGE_SIZE)),
-    transforms.ToTensor(),
-    transforms.Normalize(mean=IMAGE_MEAN, std=IMAGE_STD),
-])
+_preprocess_transform = transforms.Compose(
+    [
+        transforms.Resize((IMAGE_SIZE, IMAGE_SIZE)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=IMAGE_MEAN, std=IMAGE_STD),
+    ]
+)
 
 # Light augmentation for training
-_train_transform = transforms.Compose([
-    transforms.Resize((IMAGE_SIZE, IMAGE_SIZE)),
-    transforms.RandomHorizontalFlip(p=0.5),
-    transforms.RandomRotation(degrees=10),
-    transforms.ColorJitter(brightness=0.1, contrast=0.1),
-    transforms.ToTensor(),
-    transforms.Normalize(mean=IMAGE_MEAN, std=IMAGE_STD),
-])
+_train_transform = transforms.Compose(
+    [
+        transforms.Resize((IMAGE_SIZE, IMAGE_SIZE)),
+        transforms.RandomHorizontalFlip(p=0.5),
+        transforms.RandomRotation(degrees=10),
+        transforms.ColorJitter(brightness=0.1, contrast=0.1),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=IMAGE_MEAN, std=IMAGE_STD),
+    ]
+)
 
 
 def preprocess_image(image: Image.Image, train: bool = False) -> torch.Tensor:

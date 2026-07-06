@@ -1,8 +1,10 @@
 """DICOM dataset loader for hospital data."""
 
 from pathlib import Path
+
 from torch.utils.data import Dataset
-from src.preprocessing import load_image, get_preprocess_transform
+
+from src.preprocessing import get_preprocess_transform, load_image
 
 
 class DicomDataset(Dataset):

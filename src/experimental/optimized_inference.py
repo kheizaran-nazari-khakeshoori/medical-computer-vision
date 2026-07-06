@@ -1,7 +1,11 @@
 """Optimizing inference pipeline for batch processing."""
+
 import torch
 from torch.utils.data import DataLoader
+
 from src.utils import get_device
+
+
 def batched_inference(model, dataset, batch_size=16, device=None):
     device = device or get_device()
     model.to(device).eval()

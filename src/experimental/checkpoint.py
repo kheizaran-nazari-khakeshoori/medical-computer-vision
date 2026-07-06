@@ -1,16 +1,20 @@
 """Checkpoint saving and loading for model weights."""
 
 from pathlib import Path
+
 import torch
 
 
 def save_checkpoint(model, optimizer, epoch: int, path: str = "models/checkpoint.pth"):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
-    torch.save({
-        "epoch": epoch,
-        "state_dict": model.state_dict(),
-        "optimizer": optimizer.state_dict() if optimizer else None,
-    }, path)
+    torch.save(
+        {
+            "epoch": epoch,
+            "state_dict": model.state_dict(),
+            "optimizer": optimizer.state_dict() if optimizer else None,
+        },
+        path,
+    )
     print(f"checkpoint saved to {path}")
 
 

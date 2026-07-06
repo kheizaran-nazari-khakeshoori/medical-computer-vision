@@ -1,8 +1,9 @@
 """Patient anonymization for privacy protection."""
 
-import pydicom
-from pathlib import Path
 import hashlib
+from pathlib import Path
+
+import pydicom
 
 
 def anonymize_dicom(input_path: str, output_path: str) -> str:

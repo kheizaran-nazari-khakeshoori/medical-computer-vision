@@ -1,6 +1,5 @@
 """ONNX export for model deployment."""
 
-import os
 from pathlib import Path
 
 import torch
@@ -8,7 +7,9 @@ import torch
 from src.utils import ensure_dir
 
 
-def export_to_onnx(model, output_path: str = "models/model.onnx", input_size: tuple = (1, 3, 224, 224)):
+def export_to_onnx(
+    model, output_path: str = "models/model.onnx", input_size: tuple = (1, 3, 224, 224)
+):
     model.eval()
     ensure_dir(Path(output_path).parent)
     dummy_input = torch.randn(*input_size)

@@ -1,9 +1,9 @@
 """Image validation for uploaded medical scans."""
 
 from pathlib import Path
-from PIL import Image
-import pydicom
 
+import pydicom
+from PIL import Image
 
 ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".dcm", ".dicom"}
 MAX_FILE_SIZE_MB = 20

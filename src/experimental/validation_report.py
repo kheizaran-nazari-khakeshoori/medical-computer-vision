@@ -1,6 +1,9 @@
 """Creating data validation report."""
-from pathlib import Path
+
 import json
+from pathlib import Path
+
+
 def create_validation_report(dataset_path: str, output="reports/validation.json"):
     p = Path(dataset_path)
     files = list(p.rglob("*.jpg")) + list(p.rglob("*.png")) + list(p.rglob("*.dcm"))

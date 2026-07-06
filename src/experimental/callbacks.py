@@ -1,6 +1,5 @@
 """Early stopping callback for training."""
 
-import numpy as np
 
 
 class EarlyStopping:

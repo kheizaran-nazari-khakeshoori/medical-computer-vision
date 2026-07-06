@@ -1,10 +1,10 @@
 """Prediction pipeline with confidence scores."""
 
+from pathlib import Path
+
 import torch
 import torch.nn.functional as F
 from PIL import Image
-
-from pathlib import Path
 
 from src.config import CLASS_NAMES, MODEL_PATH
 from src.model import get_model, load_model
@@ -25,7 +25,9 @@ def _load_default_model(device):
     return model
 
 
-def predict(image: Image.Image, model: torch.nn.Module | None = None, device: torch.device | None = None):
+def predict(
+    image: Image.Image, model: torch.nn.Module | None = None, device: torch.device | None = None
+):
     """Run inference and return class, confidence and all probabilities."""
     device = device or get_device()
     if model is None:
@@ -54,14 +56,18 @@ def predict(image: Image.Image, model: torch.nn.Module | None = None, device: to
             "label": label,
             "confidence": float(conf.item()),
             "class_idx": int(idx.item()),
-            "probabilities": {CLASS_NAMES[i]: float(probs[i].item()) for i in range(len(probs)) if i < len(CLASS_NAMES)},
+            "probabilities": {
+                CLASS_NAMES[i]: float(probs[i].item())
+                for i in range(len(probs))
+                if i < len(CLASS_NAMES)
+            },
         }
 
 
 def predict_with_heatmap(image: Image.Image, model: torch.nn.Module | None = None):
     """Convenience wrapper that also generates Grad-CAM heatmap if model is ResNet50."""
+
     from src.gradcam import GradCAM
-    import numpy as np
 
     device = get_device()
     if model is None:
