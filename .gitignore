@@ -28,3 +28,6 @@ logs/
 # Experimental outputs
 wandb/
 lightning_logs/
+# Results (keep metrics.json)
+results/*.png
+results/*.jpg
